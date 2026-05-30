@@ -106,10 +106,23 @@ python hand.py
 
 **问题描述：** Windows 报告 Code 10 错误，USB 设备无法枚举。
 
-**根本原因：** PMA 缓冲区分配冲突：
-- CDC_OUT_EP: 0x110-0x14F (64字节)
-- CUSTOM_HID_EPIN: 0x140-0x14D (14字节)
-- 重叠区间: 0x140-0x14D
+**问题分析：**
+
+这次 Code 10 更像是 USB PMA 端点缓冲区分配冲突导致的枚举失败，不像是 MCU heap 或总 RAM 不够。
+
+检查后发现当前 PMA 分配里，CDC OUT 和 HID IN 的地址区间发生了重叠，这是一个实质性错误。
+
+**关键问题：**
+
+在 `usbd_conf.c` 中，当前分配是：
+- `CDC_OUT_EP` 起始 `0x110`
+- `CUSTOM_HID_EPIN_ADDR` 起始 `0x140`
+
+根据 `usbd_cdc.h`，`CDC_OUT_EP` 是 FS Bulk，包长 64 字节，所以它占用区间是 `0x110 ~ 0x14F`。
+
+根据 `usbd_customhid.h`，`CUSTOM_HID_EPIN_SIZE = 0x0D`，HID IN 从 `0x140` 开始，至少占到 `0x14C`。
+
+所以这两段明显重叠：`0x140 ~ 0x14C`。这种冲突足以让主机枚举异常，Windows 就可能报"系统资源不够，无法完成 API / 代码10"。
 
 **修复方案：** 重新规划 PMA 分配：
 
@@ -136,5 +149,6 @@ MIT License
 
 ## 参考
 
+- [cnxft/composite_hid_cdc](https://github.com/cnxft/composite_hid_cdc)
 - [STM32 USB Device Library](https://www.st.com/en/embedded-software/stm32-usb-device-library.html)
 - [USB HID Specification](https://www.usb.org/hid)
