@@ -110,7 +110,7 @@ python hand.py
 
 这次 Code 10 更像是 USB PMA 端点缓冲区分配冲突导致的枚举失败，不像是 MCU heap 或总 RAM 不够。
 
-检查后发现当前 PMA 分配里，CDC OUT 和 HID IN 的地址区间发生了重叠，这是一个实质性错误。
+检查后发现当前 PMA 分配里，CDC OUT 和 HID IN 的地址区间发生了重叠，这是一个错误。
 
 **关键问题：**
 
@@ -150,5 +150,4 @@ MIT License
 ## 参考
 
 - [cnxft/composite_hid_cdc](https://github.com/cnxft/composite_hid_cdc)
-- [STM32 USB Device Library](https://www.st.com/en/embedded-software/stm32-usb-device-library.html)
-- [USB HID Specification](https://www.usb.org/hid)
+
