@@ -1,0 +1,70 @@
+# Build outputs
+*.o
+*.obj
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+*.lss
+*.sym
+*.d
+*.su
+
+# Keil/MDK
+*.uvguix.*
+*.bak
+*.ddk
+*.edk
+*.lst
+*.lnp
+*.mpf
+*.mpj
+*.omf
+*.plg
+*.rpt
+*.tmp
+*.__i
+*._ia
+*.crf
+*.d
+*.axf
+*.tra
+*.htm
+*.sct
+*.build_log.htm
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Temporary
+*.tmp
+*.temp
